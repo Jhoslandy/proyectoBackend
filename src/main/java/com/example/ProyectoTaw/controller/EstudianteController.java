@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/controller/estudiantes")
+@RequestMapping("/api/estudiantes")
 public class EstudianteController {
 
     private final IEstudianteService estudianteService;
