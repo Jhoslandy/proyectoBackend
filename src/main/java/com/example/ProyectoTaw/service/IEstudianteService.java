@@ -2,10 +2,11 @@ package com.example.ProyectoTaw.service;
 
 import com.example.ProyectoTaw.dto.EstudianteDTO;
 import com.example.ProyectoTaw.model.Estudiante;
+
 import java.util.List;
 
 public interface IEstudianteService {
-    
+
     List<EstudianteDTO> obtenerTodosLosEstudiantes();
 
     EstudianteDTO obtenerEstudiantePorNroMatricula(String nroMatricula);
@@ -13,10 +14,10 @@ public interface IEstudianteService {
     List<EstudianteDTO> buscarEstudiantes(String query);
 
     EstudianteDTO crearEstudiante(EstudianteDTO estudianteDTO);
-    
-    EstudianteDTO actualizarEstudiante(Long id, EstudianteDTO estudianteDTO);
 
-    void eliminarEstudiante(Long id);
+    EstudianteDTO actualizarEstudiante(Integer ci, EstudianteDTO estudianteDTO);
 
-    Estudiante obtenerEstudianteConBloqueo(Long id);
+    void eliminarEstudiante(Integer ci);
+
+    Estudiante obtenerEstudianteConBloqueo(Integer ci);
 }

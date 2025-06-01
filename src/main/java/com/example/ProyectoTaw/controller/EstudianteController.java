@@ -39,8 +39,7 @@ public class EstudianteController {
     }
 
     @GetMapping("/matricula/{nroMatricula}")
-    public ResponseEntity<EstudianteDTO> obtenerEstudiantePorNroMatricula(
-        @PathVariable String nroMatricula) {
+    public ResponseEntity<EstudianteDTO> obtenerEstudiantePorNroMatricula(@PathVariable String nroMatricula) {
         long inicio = System.currentTimeMillis();
         logger.info("[ESTUDIANTE] Inicio obtenerEstudiantePorNroMatricula: {}", inicio);
         EstudianteDTO estudiante = estudianteService.obtenerEstudiantePorNroMatricula(nroMatricula);
@@ -59,10 +58,9 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantes);
     }
 
-    @GetMapping("/{id}/lock")
-    public ResponseEntity<Estudiante> getEstudianteConBloqueo(
-        @PathVariable Long id) {
-        Estudiante estudiante = estudianteService.obtenerEstudianteConBloqueo(id);
+    @GetMapping("/{ci}/lock")
+    public ResponseEntity<Estudiante> getEstudianteConBloqueo(@PathVariable Integer ci) {
+        Estudiante estudiante = estudianteService.obtenerEstudianteConBloqueo(ci);
         return ResponseEntity.ok(estudiante);
     }
 
@@ -73,19 +71,19 @@ public class EstudianteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEstudiante);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{ci}")
     @Transactional
     public ResponseEntity<EstudianteDTO> actualizarEstudiante(
-        @PathVariable Long id,
-        @Valid @RequestBody EstudianteDTO estudianteDTO) { 
-        EstudianteDTO estudianteActualizado = estudianteService.actualizarEstudiante(id, estudianteDTO);
+        @PathVariable Integer ci,
+        @Valid @RequestBody EstudianteDTO estudianteDTO) {
+        EstudianteDTO estudianteActualizado = estudianteService.actualizarEstudiante(ci, estudianteDTO);
         return ResponseEntity.ok(estudianteActualizado);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{ci}")
     @Transactional
-    public ResponseEntity<Void> eliminarEstudiante(@PathVariable Long id) {
-        estudianteService.eliminarEstudiante(id);
+    public ResponseEntity<Void> eliminarEstudiante(@PathVariable Integer ci) {
+        estudianteService.eliminarEstudiante(ci);
         return ResponseEntity.noContent().build();
     }
 }

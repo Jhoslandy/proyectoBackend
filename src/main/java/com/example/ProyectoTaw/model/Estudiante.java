@@ -5,28 +5,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
 
 /**
  * Entidad JPA que representa a un estudiante en el sistema universitario.
  * Solo incluye información personal y de matrícula.
  */
-@Data // Genera getters, setters, toString, equals y hashCode
-@NoArgsConstructor // Genera un constructor sin argumentos
-@AllArgsConstructor // Genera un constructor con todos los argumentos
-@Builder // Genera un builder para la creación de objetos
-@Entity // Anotación que indica que esta clase es una entidad JPA
-@Table(name = "estudiante") // Nombre de la tabla en la base de datos
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "estudiante")
 public class Estudiante {
-    
+
     /**
-     * Identificador único del estudiante.
+     * CI del estudiante - ahora es la clave primaria.
      */
-    @Id // Marca el campo como la clave primaria
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Estrategia de generación de valores para la clave primaria
-    private Long id;
+    @Id
+    @Column(name = "ci", nullable = false, unique = true)
+    @Min(value = 10000, message = "El CI debe tener al menos 5 dígitos")
+    @Max(value = 9999999999L, message = "El CI no puede tener más de 10 dígitos")
+    private Integer ci;
 
     /**
      * Nombre del estudiante.
@@ -41,12 +44,6 @@ public class Estudiante {
     private String apellido;
 
     /**
-     * CI del estudiante.
-     */
-    @Column(name = "ci", nullable = false, unique = true, length = 15)
-    private String ci;
-
-    /**
      * Email del estudiante.
      */
     @Column(name = "email", nullable = false, unique = true, length = 100)
@@ -56,7 +53,6 @@ public class Estudiante {
      * Fecha de nacimiento del estudiante.
      */
     @Column(name = "fecha_nacimiento", nullable = false)
-    @Temporal(TemporalType.DATE)
     private LocalDate fechaNacimiento;
 
     /**
@@ -66,5 +62,4 @@ public class Estudiante {
     private String nroMatricula;
 
     // Nota: El campo 'usuario:id' se incluiría aquí cuando tengas la entidad Usuario.
-    // Por ahora, lo excluimos como lo pediste.
 }
