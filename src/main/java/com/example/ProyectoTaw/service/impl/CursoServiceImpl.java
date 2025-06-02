@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-// import java.time.DayOfWeek; // REMOVE THIS IMPORT
-import java.time.LocalTime;
 
 @Service
 public class CursoServiceImpl implements ICursoService {
@@ -64,10 +62,9 @@ public class CursoServiceImpl implements ICursoService {
     }
 
     @Override
-    @Cacheable(value = "cursos", key = "'dia-' + #dia") // Key adjusted for String
-    public List<CursoDTO> buscarCursosPorDia(String dia) { // Changed type to String
-        // It's good practice to normalize the input for searching, e.g., to match database case
-        return cursoRepository.findByDiaIgnoreCase(dia).stream() // Assuming you add findByDiaIgnoreCase to repo
+    @Cacheable(value = "cursos", key = "'dia-' + #dia")
+    public List<CursoDTO> buscarCursosPorDia(String dia) {
+        return cursoRepository.findByDiaIgnoreCase(dia).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -77,13 +74,13 @@ public class CursoServiceImpl implements ICursoService {
     @CacheEvict(value = {"cursos"}, allEntries = true)
     @Transactional
     public CursoDTO crearCurso(CursoDTO cursoDTO) {
-        // Validation handled by @Pattern in DTO for incoming data
-        // For uniqueness, we still compare the string day
+        // Validation for format handled by @Pattern in DTO
+        // Uniqueness check for dia and horario (both Strings now)
         if (cursoRepository.existsByDiaAndHorario(cursoDTO.getDia(), cursoDTO.getHorario())) {
             throw new BusinessException("Ya existe un curso programado para el " + cursoDTO.getDia() + " a las " + cursoDTO.getHorario());
         }
 
-        cursoValidator.validacionCompletaCurso(cursoDTO);
+        cursoValidator.validacionCompletaCurso(cursoDTO); // This will call validaDiaHorarioUnico with String
 
         Curso curso = convertToEntity(cursoDTO);
         Curso cursoGuardado = cursoRepository.save(curso);
@@ -105,10 +102,10 @@ public class CursoServiceImpl implements ICursoService {
              }
         }
 
-        cursoValidator.validarActualizacionCurso(cursoDTO, cursoExistente);
+        cursoValidator.validarActualizacionCurso(cursoDTO, cursoExistente); // This will call validaDiaHorarioUnico with String
 
         cursoExistente.setDia(cursoDTO.getDia()); // Set the String value directly
-        cursoExistente.setHorario(cursoDTO.getHorario());
+        cursoExistente.setHorario(cursoDTO.getHorario()); // Set the String value directly
         cursoExistente.setSemestre(cursoDTO.getSemestre());
         cursoExistente.setAnio(cursoDTO.getAnio());
 
@@ -133,6 +130,7 @@ public class CursoServiceImpl implements ICursoService {
                 .orElseThrow(() -> new BusinessException("Curso con ID " + idCurso + " no encontrado"));
 
         try {
+            // This is a simulated delay for pessimistic locking demonstration
             Thread.sleep(15000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -146,8 +144,8 @@ public class CursoServiceImpl implements ICursoService {
     private CursoDTO convertToDTO(Curso curso) {
         return CursoDTO.builder()
                 .idCurso(curso.getIdCurso())
-                .dia(curso.getDia()) // Directly use the String
-                .horario(curso.getHorario())
+                .dia(curso.getDia())
+                .horario(curso.getHorario()) // Directly use the String
                 .semestre(curso.getSemestre())
                 .anio(curso.getAnio())
                 .build();
@@ -159,8 +157,8 @@ public class CursoServiceImpl implements ICursoService {
         }
         return Curso.builder()
                 .idCurso(cursoDTO.getIdCurso())
-                .dia(cursoDTO.getDia()) // Directly use the String
-                .horario(cursoDTO.getHorario())
+                .dia(cursoDTO.getDia())
+                .horario(cursoDTO.getHorario()) // Directly use the String
                 .semestre(cursoDTO.getSemestre())
                 .anio(cursoDTO.getAnio())
                 .build();

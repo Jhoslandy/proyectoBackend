@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// No longer need this if DayOfWeek is not directly used in the controller's param types
-// import java.time.DayOfWeek; 
 import java.util.List;
 
 @RestController
@@ -50,14 +48,8 @@ public class CursoController {
         return new ResponseEntity<>(cursos, HttpStatus.OK);
     }
 
-    /**
-     * Endpoint para buscar cursos por día de la semana.
-     * GET /api/cursos/buscar/dia?valor={dia}
-     * @param valor El día de la semana a buscar (ahora un String en español).
-     * @return ResponseEntity con una lista de CursoDTO y estado HTTP 200 (OK).
-     */
     @GetMapping("/buscar/dia")
-    public ResponseEntity<List<CursoDTO>> searchCursosByDia(@RequestParam String valor) { // Changed type to String
+    public ResponseEntity<List<CursoDTO>> searchCursosByDia(@RequestParam String valor) {
         List<CursoDTO> cursos = cursoService.buscarCursosPorDia(valor);
         return new ResponseEntity<>(cursos, HttpStatus.OK);
     }

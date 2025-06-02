@@ -6,8 +6,6 @@ import com.example.ProyectoTaw.model.Curso;
 import com.example.ProyectoTaw.repository.CursoRepository;
 import com.example.ProyectoTaw.validator.GlobalExceptionHandler.BusinessException;
 
-// import java.time.DayOfWeek; // REMOVE THIS IMPORT
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Component
@@ -20,16 +18,16 @@ public class CursoValidator {
     }
 
     /**
-     * Valida que no exista otro curso con el mismo día (string) y horario.
+     * Valida que no exista otro curso con el mismo día (string) y horario (string).
      * @param dia El día de la semana del curso (String).
-     * @param horario La hora del curso.
+     * @param horario La hora del curso (String).
      * @param idCursoActual El ID del curso actual (si es una actualización) o null (si es una creación).
      * @throws BusinessException si ya existe un curso con el mismo día y horario para otro curso.
      */
-    public void validaDiaHorarioUnico(String dia, LocalTime horario, Integer idCursoActual) { // Changed type to String
-        Optional<Curso> existente = cursoRepository.findByDiaAndHorario(dia, horario); // Uses String dia
+    public void validaDiaHorarioUnico(String dia, String horario, Integer idCursoActual) { // Changed type to String
+        Optional<Curso> existente = cursoRepository.findByDiaAndHorario(dia, horario); // Uses String horario
         if (existente.isPresent() && (idCursoActual == null || !existente.get().getIdCurso().equals(idCursoActual))) {
-            throw new BusinessException("Ya existe un curso programado para el día " + dia + " a las " + horario.toString());
+            throw new BusinessException("Ya existe un curso programado para el día " + dia + " a las " + horario);
         }
     }
 
@@ -67,7 +65,7 @@ public class CursoValidator {
      * @throws BusinessException si alguna validación falla.
      */
     public void validacionCompletaCurso(CursoDTO cursoDTO) {
-        // The @Pattern annotation in CursoDTO handles the valid day names.
+        // The @Pattern annotation in CursoDTO handles the valid day and horario formats.
         // This method still handles the uniqueness check.
         validaDiaHorarioUnico(cursoDTO.getDia(), cursoDTO.getHorario(), null);
         validaSemestre(cursoDTO.getSemestre());
@@ -75,13 +73,13 @@ public class CursoValidator {
     }
 
     /**
-     * Realiza validaciones específicas para la actualización de un curso existente.
+     * Realiza validaciones específicas para la actualización de un estudiante existente.
      * @param cursoDTO Los nuevos datos del curso.
      * @param cursoExistente La entidad del curso tal como está actualmente en la base de datos.
      * @throws BusinessException si alguna validación falla.
      */
     public void validarActualizacionCurso(CursoDTO cursoDTO, Curso cursoExistente) {
-        // If the day or horario have changed, validate their uniqueness
+        // If the day or horario combination has changed, validate its uniqueness
         if (!cursoExistente.getDia().equalsIgnoreCase(cursoDTO.getDia()) || !cursoExistente.getHorario().equals(cursoDTO.getHorario())) {
             validaDiaHorarioUnico(cursoDTO.getDia(), cursoDTO.getHorario(), cursoExistente.getIdCurso());
         }
