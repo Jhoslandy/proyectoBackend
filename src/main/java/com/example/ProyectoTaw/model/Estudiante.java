@@ -1,65 +1,41 @@
 package com.example.ProyectoTaw.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor; // Importa la anotación @AllArgsConstructor de Lombok
+import lombok.Builder; // Importa la anotación @Builder de Lombok
+import lombok.Data; 
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+@Entity 
+@Table(name = "estudiante") 
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor // Genera un constructor con todos los argumentos
+@Builder // Permite construir instancias del objeto usando el patrón Builder
+public class Estudiante implements Serializable {
 
-import java.time.LocalDate;
+    private static final long serialVersionUID = 1L; 
 
-/**
- * Entidad JPA que representa a un estudiante en el sistema universitario.
- * Solo incluye información personal y de matrícula.
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "estudiante")
-public class Estudiante {
+    @Id 
+    @Column(name = "ci", length = 20) 
+    private String ci; 
 
-    /**
-     * CI del estudiante - ahora es la clave primaria.
-     */
-    @Id
-    @Column(name = "ci", nullable = false, unique = true)
-    @Min(value = 10000, message = "El CI debe tener al menos 5 dígitos")
-    @Max(value = 9999999999L, message = "El CI no puede tener más de 10 dígitos")
-    private Integer ci;
-
-    /**
-     * Nombre del estudiante.
-     */
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre", length = 100) 
     private String nombre;
 
-    /**
-     * Apellido del estudiante.
-     */
-    @Column(name = "apellido", nullable = false, length = 50)
+    @Column(name = "apellido", length = 100)
     private String apellido;
 
-    /**
-     * Email del estudiante.
-     */
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(name = "email", length = 100, nullable = false, unique = true) 
     private String email;
 
-    /**
-     * Fecha de nacimiento del estudiante.
-     */
-    @Column(name = "fecha_nacimiento", nullable = false)
-    private LocalDate fechaNacimiento;
-
-    /**
-     * Número de matrícula único del estudiante.
-     */
-    @Column(name = "nro_matricula", nullable = false, unique = true, length = 20)
-    private String nroMatricula;
-
-    // Nota: El campo 'usuario:id' se incluiría aquí cuando tengas la entidad Usuario.
+    @Column(name = "fecha_nac") 
+    @Temporal(TemporalType.DATE) 
+    @Basic(optional = false)
+    private LocalDate fechaNac; 
 }

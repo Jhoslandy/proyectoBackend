@@ -5,7 +5,7 @@ import com.example.ProyectoTaw.model.Estudiante;
 import com.example.ProyectoTaw.repository.EstudianteRepository;
 import com.example.ProyectoTaw.service.IEstudianteService;
 import com.example.ProyectoTaw.validator.EstudianteValidator;
-import com.example.ProyectoTaw.validator.GlobalExceptionHandler.BusinessException;
+import com.example.ProyectoTaw.validator.GlobalExceptionHandler.BusinessException; // Asegúrate de que esta clase exista
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId; // Necesario para la conversión de Date a LocalDate
 
 @Service
 public class EstudianteServiceImpl implements IEstudianteService {
@@ -38,10 +41,10 @@ public class EstudianteServiceImpl implements IEstudianteService {
     }
 
     @Override
-    @Cacheable(value = "estudiante", key = "#nroMatricula")
-    public EstudianteDTO obtenerEstudiantePorNroMatricula(String nroMatricula) {
-        Estudiante estudiante = estudianteRepository.findByNroMatricula(nroMatricula)
-                .orElseThrow(() -> new BusinessException("Estudiante con número de matrícula " + nroMatricula + " no encontrado"));
+    @Cacheable(value = "estudiante", key = "#ci") // Cambiado a 'ci'
+    public EstudianteDTO obtenerEstudiantePorCi(String ci) { // Cambiado a 'obtenerEstudiantePorCi' y tipo a String
+        Estudiante estudiante = estudianteRepository.findByCi(ci) // Usando findByCi
+                .orElseThrow(() -> new BusinessException("Estudiante con CI " + ci + " no encontrado"));
         return convertToDTO(estudiante);
     }
 
@@ -54,10 +57,21 @@ public class EstudianteServiceImpl implements IEstudianteService {
     }
 
     @Override
-    @CachePut(value = "estudiante", key = "#result.ci")
+    @CachePut(value = "estudiante", key = "#result.ci") // Ajustado a result.ci
     @CacheEvict(value = {"estudiantes"}, allEntries = true)
+    @Transactional // Agregado @Transactional para operaciones de escritura
     public EstudianteDTO crearEstudiante(EstudianteDTO estudianteDTO) {
-        estudianteValidator.validacionCompletaEstudiante(estudianteDTO);
+        // Validar si el CI ya existe antes de crear
+        if (estudianteRepository.existsByCi(estudianteDTO.getCi())) {
+            throw new BusinessException("Ya existe un estudiante con la CI: " + estudianteDTO.getCi());
+        }
+        // Validar si el email ya existe antes de crear
+        if (estudianteRepository.existsByEmail(estudianteDTO.getEmail())) {
+            throw new BusinessException("Ya existe un estudiante con el email: " + estudianteDTO.getEmail());
+        }
+
+        estudianteValidator.validacionCompletaEstudiante(estudianteDTO); // Asume que este método también valida campos
+
         Estudiante estudiante = convertToEntity(estudianteDTO);
         Estudiante estudianteGuardado = estudianteRepository.save(estudiante);
         return convertToDTO(estudianteGuardado);
@@ -66,17 +80,25 @@ public class EstudianteServiceImpl implements IEstudianteService {
     @Override
     @CachePut(value = "estudiante", key = "#ci")
     @CacheEvict(value = {"estudiantes"}, allEntries = true)
-    public EstudianteDTO actualizarEstudiante(Integer ci, EstudianteDTO estudianteDTO) {
-        Estudiante estudianteExistente = estudianteRepository.findById(ci)
+    @Transactional // Agregado @Transactional para operaciones de escritura
+    public EstudianteDTO actualizarEstudiante(String ci, EstudianteDTO estudianteDTO) { // Tipo cambiado a String
+        Estudiante estudianteExistente = estudianteRepository.findById(ci) // Usando findById
                 .orElseThrow(() -> new BusinessException("Estudiante con CI " + ci + " no encontrado para actualizar"));
 
-        estudianteValidator.validarActualizacionEstudiante(estudianteDTO, estudianteExistente);
+        // Validar que el email, si se cambia, no exista para otro estudiante
+        if (!estudianteExistente.getEmail().equals(estudianteDTO.getEmail()) && estudianteRepository.existsByEmail(estudianteDTO.getEmail())) {
+            throw new BusinessException("El email '" + estudianteDTO.getEmail() + "' ya está registrado para otro estudiante.");
+        }
 
+        estudianteValidator.validarActualizacionEstudiante(estudianteDTO, estudianteExistente); // Asume validación
+
+        // Actualizar campos de la entidad con los datos del DTO
+        // Importante: No actualizamos 'ci' ya que es la clave primaria y no debería cambiar
         estudianteExistente.setNombre(estudianteDTO.getNombre());
         estudianteExistente.setApellido(estudianteDTO.getApellido());
         estudianteExistente.setEmail(estudianteDTO.getEmail());
-        estudianteExistente.setFechaNacimiento(estudianteDTO.getFechaNacimiento());
-        estudianteExistente.setNroMatricula(estudianteDTO.getNroMatricula());
+        // Convierte LocalDate del DTO a Date para la entidad
+        estudianteExistente.setFechaNac(estudianteDTO.getFechaNac());
 
         Estudiante estudianteActualizado = estudianteRepository.save(estudianteExistente);
         return convertToDTO(estudianteActualizado);
@@ -84,7 +106,8 @@ public class EstudianteServiceImpl implements IEstudianteService {
 
     @Override
     @CacheEvict(value = {"estudiante", "estudiantes"}, allEntries = true)
-    public void eliminarEstudiante(Integer ci) {
+    @Transactional // Agregado @Transactional para operaciones de escritura
+    public void eliminarEstudiante(String ci) { // Tipo cambiado a String
         if (!estudianteRepository.existsById(ci)) {
             throw new BusinessException("Estudiante con CI " + ci + " no encontrado para eliminar");
         }
@@ -92,39 +115,49 @@ public class EstudianteServiceImpl implements IEstudianteService {
     }
 
     @Override
-    @Transactional
-    public Estudiante obtenerEstudianteConBloqueo(Integer ci) {
-        Estudiante est = estudianteRepository.findById(ci)
+    @Transactional // Asegura que esta operación se ejecute dentro de una transacción
+    public Estudiante obtenerEstudianteConBloqueo(String ci) { // Tipo cambiado a String
+        // Usamos el findById que tiene la anotación @Lock en el repositorio
+        Estudiante est = estudianteRepository.findById(ci) 
                 .orElseThrow(() -> new BusinessException("Estudiante con CI " + ci + " no encontrado"));
+        
+        // Simula un proceso largo que mantiene el bloqueo
         try {
-            Thread.sleep(15000);
+            Thread.sleep(15000); // 15 segundos
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            // Restaura el estado de interrupción
+            Thread.currentThread().interrupt(); 
+            throw new BusinessException("La operación de bloqueo fue interrumpida.");
         }
         return est;
     }
 
+    // --- Métodos de Conversión DTO <-> Entidad ---
+
+    // Convierte una entidad Estudiante a un EstudianteDTO
     private EstudianteDTO convertToDTO(Estudiante estudiante) {
-        if (estudiante == null) return null;
         return EstudianteDTO.builder()
                 .ci(estudiante.getCi())
                 .nombre(estudiante.getNombre())
                 .apellido(estudiante.getApellido())
                 .email(estudiante.getEmail())
-                .fechaNacimiento(estudiante.getFechaNacimiento())
-                .nroMatricula(estudiante.getNroMatricula())
+                // Convierte java.util.Date a java.time.LocalDate
+                .fechaNac(estudiante.getFechaNac())
                 .build();
     }
 
+    // Convierte un EstudianteDTO a una entidad Estudiante
     private Estudiante convertToEntity(EstudianteDTO estudianteDTO) {
-        if (estudianteDTO == null) return null;
+        if (estudianteDTO == null) {
+            return null;
+        }
         return Estudiante.builder()
                 .ci(estudianteDTO.getCi())
                 .nombre(estudianteDTO.getNombre())
                 .apellido(estudianteDTO.getApellido())
                 .email(estudianteDTO.getEmail())
-                .fechaNacimiento(estudianteDTO.getFechaNacimiento())
-                .nroMatricula(estudianteDTO.getNroMatricula())
+                // Convierte java.time.LocalDate a java.util.Date
+                .fechaNac(estudianteDTO.getFechaNac())
                 .build();
     }
 }
