@@ -22,8 +22,8 @@ public class Docente implements Serializable {
     private static final long serialVersionUID = 1L; 
 
     @Id 
-    @Column(name = "ci", length = 20) 
-    private String ci; 
+    @Column(name = "ci_docente", length = 20) 
+    private String ciDocente; 
 
     @Column(name = "nombre", length = 100) 
     private String nombre;

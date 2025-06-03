@@ -28,7 +28,7 @@ public class DocenteValidator {
     public void validaEmailUnico(String email, String ciActual) { // CI ahora es String
         Optional<Docente> existente = docenteRepository.findByEmail(email);
         // Si existe un Docente con ese email Y su CI no es el CI del Docente actual
-        if (existente.isPresent() && !existente.get().getCi().equals(ciActual)) {
+        if (existente.isPresent() && !existente.get().getCiDocente().equals(ciActual)) {
             throw new BusinessException("Ya existe un Docente con este email: " + email);
         }
     }
@@ -50,7 +50,7 @@ public class DocenteValidator {
     public void validaCiUnico(String ci, String ciActual) { // CI ahora es String
         Optional<Docente> existente = docenteRepository.findByCi(ci); // Usa findByCi para String
         // Si existe un Docente con esa CI Y su CI no es el CI del Docente actual
-        if (existente.isPresent() && (ciActual == null || !existente.get().getCi().equals(ciActual))) {
+        if (existente.isPresent() && (ciActual == null || !existente.get().getCiDocente().equals(ciActual))) {
             throw new BusinessException("Ya existe un Docente con este CI: " + ci);
         }
     }
@@ -161,13 +161,13 @@ public class DocenteValidator {
     public void validarActualizacionDocente(DocenteDTO docenteDTO, Docente docenteExistente) {
         // Si el email ha cambiado, validar su unicidad
         if (!docenteExistente.getEmail().equalsIgnoreCase(docenteDTO.getEmail())) {
-            validaEmailUnico(docenteDTO.getEmail(), docenteExistente.getCi());
+            validaEmailUnico(docenteDTO.getEmail(), docenteExistente.getCiDocente());
         }
         // Si la CI ha cambiado (lo cual no debería ocurrir para una PK), validar su unicidad
         // Usualmente, la CI no se actualiza en una actualización de datos, solo se usa para identificar el registro.
         // Si permites que la CI cambie, esta validación es necesaria.
-        if (!docenteExistente.getCi().equals(docenteDTO.getCi())) {
-             validaCiUnico(docenteDTO.getCi(), docenteExistente.getCi());
+        if (!docenteExistente.getCiDocente().equals(docenteDTO.getCi())) {
+             validaCiUnico(docenteDTO.getCi(), docenteExistente.getCiDocente());
         }
 
         // Validaciones que siempre deben aplicarse, sin importar si los campos cambiaron
