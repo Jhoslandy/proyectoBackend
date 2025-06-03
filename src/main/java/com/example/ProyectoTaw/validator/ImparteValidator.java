@@ -28,7 +28,7 @@ public class ImparteValidator {
      * @throws BusinessException si la combinación no es única.
      */
     public void validaRelacionUnica(String materiaCodigoUnico, String ciDocente, Long idImparteActual) {
-        Optional<Imparte> existente = imparteRepository.findByMateriaCodigoUnicoAndciDocente(materiaCodigoUnico, ciDocente);
+        Optional<Imparte> existente = imparteRepository.findByMateriaCodigoUnicoAndDocenteCiDocente(materiaCodigoUnico, ciDocente);
 
         if (existente.isPresent()) {
             if (idImparteActual == null || !existente.get().getIdImparte().equals(idImparteActual)) {
