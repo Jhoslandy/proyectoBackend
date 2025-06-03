@@ -20,14 +20,14 @@ public interface DocenteRepository extends JpaRepository<Docente, String> {
     
     // Verifica si ya existe un docente con la CI dada.
     // Ajustado a 'String' para coincidir con el tipo de 'ci' en la entidad.
-    Boolean existsByCi(String ci); 
+    Boolean existsByCiDocente(String ci); 
     
     // Busca un docente por su email.
     Optional<Docente> findByEmail(String email);
     
     // Busca un docente por su CI.
     // Ajustado a 'String' para coincidir con el tipo de 'ci' en la entidad.
-    Optional<Docente> findByCi(String ci); 
+    Optional<Docente> findByCiDocente(String ci); 
 
     // --- Métodos de Búsqueda Personalizada (READ) ---
     // Busca docente cuyo nombre o apellido contengan la cadena dada (ignorando mayúsculas/minúsculas).
