@@ -48,7 +48,7 @@ public class DocenteValidator {
      * @throws BusinessException si la CI ya existe para otro Docente.
      */
     public void validaCiUnico(String ci, String ciActual) { // CI ahora es String
-        Optional<Docente> existente = docenteRepository.findByCi(ci); // Usa findByCi para String
+        Optional<Docente> existente = docenteRepository.findByCiDocente(ci); // Usa findByCi para String
         // Si existe un Docente con esa CI Y su CI no es el CI del Docente actual
         if (existente.isPresent() && (ciActual == null || !existente.get().getCiDocente().equals(ciActual))) {
             throw new BusinessException("Ya existe un Docente con este CI: " + ci);

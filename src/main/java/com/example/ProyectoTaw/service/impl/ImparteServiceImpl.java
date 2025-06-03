@@ -89,7 +89,7 @@ public class ImparteServiceImpl implements IImparteService {
         Materia materia = materiaRepository.findByCodigoUnico(imparteDTO.getMateriaCodigoUnico())
                 .orElseThrow(() -> new BusinessException("Materia con código único '" + imparteDTO.getMateriaCodigoUnico() + "' no encontrada."));
 
-        Docente docente = docenteRepository.findByCi(imparteDTO.getCiDocente())
+        Docente docente = docenteRepository.findByCiDocente(imparteDTO.getCiDocente())
                 .orElseThrow(() -> new BusinessException("Docente con ID " + imparteDTO.getCiDocente() + " no encontrado."));
 
         // Validar unicidad antes de crear (por la UniqueConstraint en la entidad)
@@ -118,7 +118,7 @@ public class ImparteServiceImpl implements IImparteService {
         Materia nuevaMateria = materiaRepository.findByCodigoUnico(imparteDTO.getMateriaCodigoUnico())
                 .orElseThrow(() -> new BusinessException("Materia con código único '" + imparteDTO.getMateriaCodigoUnico() + "' no encontrada."));
 
-        Docente nuevoDocente = docenteRepository.findByCi(imparteDTO.getCiDocente())
+        Docente nuevoDocente = docenteRepository.findByCiDocente(imparteDTO.getCiDocente())
                 .orElseThrow(() -> new BusinessException("Docente con ID " + imparteDTO.getCiDocente() + " no encontrado."));
 
         // Validar unicidad si se cambian los campos que formaban la clave natural

@@ -47,7 +47,7 @@ public class DocenteServiceImpl implements IDocenteService {
     @Override
     @Cacheable(value = "docente", key = "#ci") // Cambiado a 'ci'
     public DocenteDTO obtenerDocentePorCi(String ci) { // Cambiado a 'obtenerDocentePorCi' y tipo a String
-        Docente docente = docenteRepository.findByCi(ci) // Usando findByCi
+        Docente docente = docenteRepository.findByCiDocente(ci) // Usando findByCi
                 .orElseThrow(() -> new BusinessException("Docente con CI " + ci + " no encontrado"));
         return convertToDTO(docente);
     }
@@ -66,7 +66,7 @@ public class DocenteServiceImpl implements IDocenteService {
     @Transactional // Agregado @Transactional para operaciones de escritura
     public DocenteDTO crearDocente(DocenteDTO docenteDTO) {
         // Validar si el CI ya existe antes de crear
-        if (docenteRepository.existsByCi(docenteDTO.getCi())) {
+        if (docenteRepository.existsByCiDocente(docenteDTO.getCi())) {
             throw new BusinessException("Ya existe un Docente con la CI: " + docenteDTO.getCi());
         }
         // Validar si el email ya existe antes de crear
