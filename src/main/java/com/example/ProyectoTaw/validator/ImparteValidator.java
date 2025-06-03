@@ -48,7 +48,7 @@ public class ImparteValidator {
     public void validarActualizacionRelacion(ImparteDTO imparteDTO, Imparte relacionExistente) {
         // Si la materia o el Docente cambian, valida la unicidad de la nueva combinación
         if (!relacionExistente.getMateria().getCodigoUnico().equals(imparteDTO.getMateriaCodigoUnico()) ||
-            !relacionExistente.getDocente().getCi().equals(imparteDTO.getCiDocente())) {
+            !relacionExistente.getDocente().getCiDocente().equals(imparteDTO.getCiDocente())) {
             validaRelacionUnica(imparteDTO.getMateriaCodigoUnico(), imparteDTO.getCiDocente(), relacionExistente.getIdImparte());
         }
         // Agrega cualquier otra validación específica para la actualización si es necesaria

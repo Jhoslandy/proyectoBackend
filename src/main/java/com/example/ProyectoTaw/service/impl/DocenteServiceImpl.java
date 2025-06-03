@@ -143,7 +143,7 @@ public class DocenteServiceImpl implements IDocenteService {
     // Convierte una entidad Docente a un DocenteDTO
     private DocenteDTO convertToDTO(Docente docente) {
         return DocenteDTO.builder()
-                .ci(docente.getCi())
+                .ci(docente.getCiDocente())
                 .nombre(docente.getNombre())
                 .apellido(docente.getApellido())
                 .email(docente.getEmail())
@@ -160,7 +160,7 @@ public class DocenteServiceImpl implements IDocenteService {
             return null;
         }
         return Docente.builder()
-                .ci(docenteDTO.getCi())
+                .ciDocente(docenteDTO.getCi())
                 .nombre(docenteDTO.getNombre())
                 .apellido(docenteDTO.getApellido())
                 .email(docenteDTO.getEmail())

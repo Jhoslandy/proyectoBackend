@@ -123,7 +123,7 @@ public class ImparteServiceImpl implements IImparteService {
 
         // Validar unicidad si se cambian los campos que formaban la clave natural
         if (!relacionExistente.getMateria().getCodigoUnico().equals(imparteDTO.getMateriaCodigoUnico()) ||
-            !relacionExistente.getDocente().getCi().equals(imparteDTO.getCiDocente())) {
+            !relacionExistente.getDocente().getCiDocente().equals(imparteDTO.getCiDocente())) {
 
             if (imparteRepository.existsByMateriaCodigoUnicoAndCiDocente(
                 imparteDTO.getMateriaCodigoUnico(), imparteDTO.getCiDocente())) {
@@ -178,7 +178,7 @@ public class ImparteServiceImpl implements IImparteService {
         return ImparteDTO.builder()
                 .idImparte(imparte.getIdImparte())
                 .materiaCodigoUnico(imparte.getMateria().getCodigoUnico())
-                .ciDocente(imparte.getDocente().getCi())
+                .ciDocente(imparte.getDocente().getCiDocente())
                 .build();
     }
 
