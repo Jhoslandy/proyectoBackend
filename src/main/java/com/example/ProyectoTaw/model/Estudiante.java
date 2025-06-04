@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor; // Importa la anotación @AllArgsConstructor de Lombok
 import lombok.Builder; // Importa la anotación @Builder de Lombok
@@ -31,7 +34,9 @@ public class Estudiante implements Serializable {
     @Column(name = "apellido", length = 100)
     private String apellido;
 
-    @Column(name = "email", length = 100, nullable = false, unique = true) 
+    @Email
+    @NotBlank
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
     @Column(name = "fecha_nac") 
