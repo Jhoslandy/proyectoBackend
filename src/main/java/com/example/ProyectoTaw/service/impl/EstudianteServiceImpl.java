@@ -32,6 +32,10 @@ public class EstudianteServiceImpl implements IEstudianteService {
         this.estudianteValidator = estudianteValidator;
     }
 
+    public EstudianteServiceImpl(EstudianteRepository repo) {
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
     @Cacheable(value = "estudiantes")
     public List<EstudianteDTO> obtenerTodosLosEstudiantes() {
