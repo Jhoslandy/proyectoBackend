@@ -32,10 +32,12 @@ public class EstudianteServiceImpl implements IEstudianteService {
         this.estudianteValidator = estudianteValidator;
     }
 
-    public EstudianteServiceImpl(EstudianteRepository repo) {
-        //TODO Auto-generated constructor stub
+    public EstudianteServiceImpl(EstudianteRepository estudianteRepository) {
+        this.estudianteRepository = estudianteRepository;
+        this.estudianteValidator = null;
     }
 
+    
     @Override
     @Cacheable(value = "estudiantes")
     public List<EstudianteDTO> obtenerTodosLosEstudiantes() {
@@ -59,6 +61,7 @@ public class EstudianteServiceImpl implements IEstudianteService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     @CachePut(value = "estudiante", key = "#result.ci") // Ajustado a result.ci
