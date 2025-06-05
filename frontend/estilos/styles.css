@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif; /* Puedes cambiar la fuente a tu gusto */
+    background-image: url('../img/primera.png'); /* Ruta de tu imagen */
+    background-size: cover; /* ¡Asegura que la imagen cubra toda la pantalla! */
+    background-position: center; /* Centra la imagen en el fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Opcional: fija la imagen para que no se desplace con el scroll */
+    color: #fff; /* Color de texto blanco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Asegura que ocupe el 100% de la altura de la ventana */
+    overflow: hidden; /* Evita barras de desplazamiento si el contenido no las necesita */
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+}
+
+.title {
+    font-size: 3.5em; /* Tamaño grande para el título principal */
+    margin-bottom: 10px;
+    letter-spacing: 2px; /* Espaciado entre letras para un efecto más estilizado */
+}
+
+.welcome-text {
+    font-size: 2.5em; /* Tamaño para ¿BIENVENIDO? */
+    margin-bottom: 20px;
+    color: #00bcd4; /* Un azul cian para destacar (similar al de la imagen) */
+    letter-spacing: 1px;
+}
+
+.instruction {
+    font-size: 1.5em; /* Tamaño para la instrucción */
+    margin-bottom: 50px;
+    color: #00bcd4; /* Mismo azul cian */
+    letter-spacing: 1px;
+}
+
+.roles {
+    display: flex;
+    justify-content: center;
+    gap: 150px; /* Espacio entre los botones */
+    margin-top: 50px;
+}
+
+.role-button {
+    background-color: transparent;
+    border: 2px solid #fff; /* Borde blanco */
+    color: #fff;
+    padding: 20px 40px;
+    font-size: 1.8em; /* Tamaño de texto para los botones */
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px; /* Bordes ligeramente redondeados */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.role-button:hover {
+    background-color: #00bcd4; /* Fondo azul cian al pasar el ratón */
+    border-color: #00bcd4;
+    color: #000; /* Texto oscuro al pasar el ratón para contraste */
+}
+
+/* Media Queries para ajustar en pantallas más pequeñas */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5em;
+    }
+
+    .welcome-text {
+        font-size: 1.8em;
+    }
+
+    .instruction {
+        font-size: 1.2em;
+    }
+
+    .roles {
+        flex-direction: column; /* Apila los botones en pantallas pequeñas */
+        gap: 30px; /* Reduce el espacio entre botones apilados */
+        margin-top: 30px;
+    }
+
+    .role-button {
+        width: 80%; /* Ajusta el ancho de los botones */
+        margin: 0 auto; /* Centra los botones apilados */
+        font-size: 1.5em;
+        padding: 15px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 2em;
+    }
+
+    .welcome-text {
+        font-size: 1.5em;
+    }
+
+    .instruction {
+        font-size: 1em;
+    }
+
+    .role-button {
+        font-size: 1.2em;
+        padding: 12px 25px;
+    }
+}

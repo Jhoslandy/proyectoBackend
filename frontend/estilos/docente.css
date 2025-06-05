@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: flex-end; /* Alinea el contenido a la derecha */
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('../img/docenteLogin.png'); /* Cuidado con la ruta. Ajústala si es necesario. */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    color: #fff; /* Color de texto predeterminado si aplica */
+    position: relative; /* Necesario para posicionar el back-to-home */
+}
+
+.login-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end; /* Alinea los elementos de esta columna a la derecha */
+    width: 100%;
+    height: 100vh; /* Asegura que ocupe toda la altura */
+    padding-right: 5vw; /* Espacio desde el borde derecho de la pantalla */
+    box-sizing: border-box;
+    position: relative; /* Permite posicionar el botón de volver arriba */
+}
+
+.back-to-home {
+    position: absolute; /* Posicionamiento absoluto */
+    top: 30px; /* Distancia desde la parte superior */
+    right: 5vw; /* Distancia desde el borde derecho */
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.back-to-home .arrow {
+    font-size: 1.5em;
+    line-height: 1; /* Asegura que la flecha esté bien alineada */
+}
+
+.login-card {
+    background-color: rgba(30, 144, 255, 0.8); /* Azul Dodger Blue con 80% de opacidad */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 450px; /* Ancho fijo para la tarjeta de login */
+    text-align: left; /* Alinea el texto dentro de la tarjeta a la izquierda */
+    color: #fff; /* Texto dentro de la tarjeta blanco */
+}
+
+.welcome-message {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    font-weight: bold;
+    text-align: center; /* Centra el mensaje de bienvenida */
+}
+
+.login-form label {
+    display: block; /* Cada label en su propia línea */
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1.1em;
+    box-sizing: border-box;
+}
+
+.login-button {
+    width: 100%;
+    padding: 18px;
+    background-color: #fff; /* Fondo blanco para el botón */
+    color: #1e90ff; /* Color de texto azul para el botón */
+    border: none;
+    border-radius: 8px;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #f0f0f0; /* Un gris claro al pasar el ratón */
+    color: #1e90ff; /* Mantiene el color del texto */
+}
+
+/* Media Queries para ajustar en pantallas más pequeñas */
+@media (max-width: 1024px) {
+    .login-card {
+        width: 80%; /* Hace la tarjeta más ancha en pantallas medianas */
+        padding: 30px;
+    }
+    .back-to-home {
+        top: 20px;
+        right: 4vw;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        justify-content: center; /* Centra el contenido en pantallas pequeñas */
+        padding: 0 20px; /* Añade padding horizontal */
+        box-sizing: border-box;
+    }
+    .login-page-container {
+        align-items: center; /* Centra la columna */
+        padding-right: 0;
+    }
+    .login-card {
+        width: 90%; /* Más ancho en pantallas pequeñas */
+        padding: 25px;
+    }
+    .welcome-message {
+        font-size: 1.3em;
+    }
+    .login-form label,
+    .login-form input,
+    .login-button {
+        font-size: 1em;
+        padding: 12px;
+    }
+    .back-to-home {
+        top: 15px;
+        right: auto; /* Desactiva right */
+        left: 20px; /* Posiciona a la izquierda */
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 20px;
+    }
+    .welcome-message {
+        font-size: 1.1em;
+    }
+    .login-form input,
+    .login-button {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .back-to-home {
+        font-size: 0.8em;
+        left: 15px;
+    }
+}

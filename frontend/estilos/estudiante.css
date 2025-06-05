@@ -1,0 +1,158 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: flex-start; /* Alinea el contenido a la izquierda */
+    align-items: center;
+    min-height: 100vh;
+    /* Ruta relativa a estudiante.css: sube una carpeta (..) y luego baja a img/ */
+    background-image: url('../img/estudianteLogin.png'); /* Asegúrate de que esta imagen exista y tenga el nombre correcto */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    color: #fff;
+    position: relative;
+}
+
+.login-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Alinea los elementos de esta columna a la izquierda */
+    width: 100%;
+    height: 100vh; /* Asegura que ocupe toda la altura */
+    padding-left: 5vw; /* Espacio desde el borde izquierdo de la pantalla */
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-to-home {
+    position: absolute;
+    top: 30px;
+    left: 5vw; /* Distancia desde el borde izquierdo */
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.login-card {
+    background-color: rgba(30, 144, 255, 0.8); /* Azul Dodger Blue con 80% de opacidad */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 450px; /* Ancho fijo para la tarjeta de login */
+    text-align: left;
+    color: #fff;
+}
+
+.welcome-message {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    font-weight: bold;
+    text-align: center; /* Centra el mensaje de bienvenida */
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1.1em;
+    box-sizing: border-box;
+}
+
+.login-button {
+    width: 100%;
+    padding: 18px;
+    background-color: #fff;
+    color: #1e90ff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #f0f0f0;
+    color: #1e90ff;
+}
+
+/* Media Queries para ajustar en pantallas más pequeñas */
+@media (max-width: 1024px) {
+    .login-card {
+        width: 80%;
+        padding: 30px;
+    }
+    .back-to-home {
+        top: 20px;
+        left: 4vw;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        justify-content: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+    .login-page-container {
+        align-items: center;
+        padding-left: 0;
+    }
+    .login-card {
+        width: 90%;
+        padding: 25px;
+    }
+    .welcome-message {
+        font-size: 1.3em;
+    }
+    .login-form label,
+    .login-form input,
+    .login-button {
+        font-size: 1em;
+        padding: 12px;
+    }
+    .back-to-home {
+        top: 15px;
+        left: 20px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 20px;
+    }
+    .welcome-message {
+        font-size: 1.1em;
+    }
+    .login-form input,
+    .login-button {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .back-to-home {
+        font-size: 0.8em;
+        left: 15px;
+    }
+}
