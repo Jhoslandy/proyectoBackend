@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // Indica que esta clase es un controlador REST
+@CrossOrigin(origins = "http://localhost:5500") // Permite solicitudes CORS desde el origen especificado
 @RequestMapping("/api/docentes") // Define la URL base para todos los endpoints de este controlador
 public class DocenteController {
 
