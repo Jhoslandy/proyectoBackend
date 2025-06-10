@@ -32,13 +32,24 @@ public class Usuario {
     
     private String apellido;
     
-    private boolean activo = true;
+    private boolean activo = true; // Por defecto true, puedes ajustar según tu lógica
     
-    @ManyToMany(fetch = FetchType.EAGER) // Carga los roles de forma anticipada (EAGER) para evitar problemas de LazyInitializationException
+    @ManyToMany(fetch = FetchType.EAGER) // Carga los roles de forma anticipada
     @JoinTable(
         name = "usuario_roles", // Nombre de la tabla intermedia
         joinColumns = @JoinColumn(name = "usuario_id"), // Columna que referencia al usuario
         inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia al rol
     )
     private Set<Rol> roles = new HashSet<>();
+
+    // Constructor específico para el registro de usuarios (sin ID y roles iniciales)
+    public Usuario(String nombre, String apellido, String email, String username, String password, boolean activo) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.activo = activo;
+        this.roles = new HashSet<>(); // Inicializa la lista de roles vacía, se asignarán después
+    }
 }

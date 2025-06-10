@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority; // Importar
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List; // Importar
+import java.util.stream.Collectors; // Importar
 
 @Component
 public class JwtUtils {
@@ -27,7 +30,6 @@ public class JwtUtils {
 
     private SecretKey secretKey;
 
-    // Inicializa la clave secreta después de inyectar las propiedades
     @PostConstruct
     public void init() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
@@ -41,8 +43,14 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
+        // Obtener los roles y convertirlos a String para incluirlos en el token
+        List<String> roles = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority) // Obtiene el string del rol (ej. "ROLE_ESTUDIANTE")
+                .collect(Collectors.toList());
+
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
+                .claim("roles", roles) // AÑADIDO: Incluir los roles como un claim en el JWT
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(secretKey, SignatureAlgorithm.HS512)

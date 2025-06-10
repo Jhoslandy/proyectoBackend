@@ -16,6 +16,12 @@ body {
     position: relative;
 }
 
+/* Si tu .background-container tenía un propósito específico, defínelo aquí.
+   Si no, considera eliminarlo del HTML si no tiene estilos. */
+.background-container {
+    /* Por ejemplo: width: 100%; height: 100%; background-color: rgba(0,0,0,0.3); */
+}
+
 .login-page-container {
     display: flex;
     flex-direction: column;
@@ -36,10 +42,17 @@ body {
     text-decoration: none;
     font-size: 1.2em;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    display: flex; /* Añadido para alinear la flecha y el texto */
+    align-items: center; /* Añadido para alinear la flecha y el texto */
+    gap: 5px; /* Espacio entre la flecha y el texto */
 }
+
+/* Estilo para la flecha dentro del enlace de volver al inicio */
+.back-to-home .arrow {
+    font-size: 1.5em; /* Tamaño de la flecha */
+    line-height: 1; /* Alineación vertical de la flecha */
+}
+
 
 .login-card {
     background-color: rgba(30, 144, 255, 0.8); /* Azul Dodger Blue con 80% de opacidad */
@@ -49,6 +62,7 @@ body {
     width: 450px; /* Ancho fijo para la tarjeta de login */
     text-align: left;
     color: #fff;
+    position: relative; /* Importante para el posicionamiento de las alertas si fueran absolutas */
 }
 
 .welcome-message {
@@ -65,7 +79,9 @@ body {
     font-size: 1.1em;
 }
 
-.login-form input[type="email"],
+/* Asegúrate de incluir el type="text" para el input de username */
+.login-form input[type="text"], /* CAMBIO AQUÍ: Ahora se usa type="text" */
+.login-form input[type="email"], /* Mantenido por si acaso, pero ya no se usará para el login */
 .login-form input[type="password"] {
     width: 100%;
     padding: 15px;
@@ -89,12 +105,74 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex; /* AÑADIDO: Para centrar el texto y el spinner */
+    justify-content: center; /* AÑADIDO: Para centrar el texto y el spinner */
+    align-items: center; /* AÑADIDO: Para centrar el texto y el spinner */
 }
 
 .login-button:hover {
     background-color: #f0f0f0;
     color: #1e90ff;
 }
+
+
+/* --- AÑADIDOS: ESTILOS PARA LAS NOTIFICACIONES DE ALERTA --- */
+.alert-container {
+    margin-bottom: 15px;
+    min-height: 40px; /* Asegura un alto mínimo para que sea visible */
+    display: flex; /* Permite centrar el contenido */
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    width: 100%; /* Ocupa el ancho completo de su padre */
+    box-sizing: border-box; /* Incluye padding y border en el ancho/alto */
+    position: relative; 
+}
+
+.alert {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    width: fit-content; /* Se ajusta al contenido */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para que destaque */
+    color: #fff; /* Texto blanco para las alertas para que contraste con el fondo azul de la tarjeta */
+    font-weight: bold;
+}
+
+.alert-success {
+    background-color: #28a745; /* Un verde más oscuro y visible */
+    border: 1px solid #28a745;
+}
+
+.alert-error {
+    background-color: #dc3545; /* Un rojo más oscuro y visible */
+    border: 1px solid #dc3545;
+}
+
+/* --- AÑADIDOS: Estilos para el spinner de carga --- */
+.spinner {
+    border: 3px solid rgba(0, 0, 0, 0.3); /* Cambiado a negro semi-transparente para contraste con fondo blanco del botón */
+    border-top: 3px solid #1e90ff; /* Color del spinner (azul del botón) */
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle; /* Para que esté alineado con el texto */
+    margin-left: 5px;
+}
+
+/* --- AÑADIDOS: Animación para el spinner --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- AÑADIDOS: Clase para ocultar elementos (usada por el JS) --- */
+.hidden {
+    display: none !important;
+}
+
 
 /* Media Queries para ajustar en pantallas más pequeñas */
 @media (max-width: 1024px) {

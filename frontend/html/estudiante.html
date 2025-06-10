@@ -11,20 +11,24 @@
         </div>
 
     <div class="login-page-container">
-        <a href="index.html" class="back-to-home"> < Volver al Inicio</a>
+        <a href="index.html" class="back-to-home">
+            <span class="arrow">&lt;</span> Volver al Inicio
+        </a>
 
         <div class="login-card">
-            <p class="welcome-message">
-                TE DAMOS LA MÁS CORDIAL BIENVENIDA A NUESTRA COMUNIDAD DE APRENDIZAJE.
-            </p>
+            <h2 class="welcome-message">
+                TE DAMOS LA MÁS CORDIAL BIENVENIDA A NUESTRA COMUNIDAD DE APRENDIZAJE.            </h2>
+            
+            <div id="login-alert" class="alert-container"></div>
+
             <form id="estudianteLoginForm" class="login-form">
-                <label for="correo">Correo:</label>
-                <input type="email" id="correo" name="correo" required>
+                <label for="username">Nombre de Usuario:</label> <input type="text" id="username" name="username" required autocomplete="username"> <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" required autocomplete="current-password">
 
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required>
-
-                <button type="submit" class="login-button">LOGIN</button>
+                <button type="submit" class="login-button">
+                    <span id="login-btn-text">LOGIN</span>
+                    <span id="login-loading" class="spinner hidden"></span>
+                </button>
             </form>
         </div>
     </div>

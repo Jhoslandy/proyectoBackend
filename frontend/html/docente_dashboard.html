@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Docente - Gestión de Estudiantes</title>
+    <link rel="stylesheet" href="../estilos/dashboard.css"> 
+    <link rel="stylesheet" href="../estilos/modal.css"> 
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Bienvenido, Docente</h1>
+            <span id="current-user" class="user-info"></span>
+            <button id="logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+        </header>
+
+        <main class="dashboard-main">
+            <div id="dashboard-alert" class="alert-container"></div>
+            
+            <div class="controls">
+                <h2>Gestión de Estudiantes</h2>
+                <button id="add-student-btn" class="btn btn-primary">Añadir Nuevo Estudiante</button>
+            </div>
+
+            <div class="student-table-container">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                            <th>Nº Inscripción</th>
+                            <th>Estado</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Agregar Estudiante</h2>
+            <div id="modal-alert" class="alert-container"></div>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                
+                <label for="student-name">Nombre:</label>
+                <input type="text" id="student-name" name="nombre" required>
+
+                <label for="student-lname">Apellido:</label>
+                <input type="text" id="student-lname" name="apellido" required>
+
+                <label for="student-email">Email:</label>
+                <input type="email" id="student-email" name="email" required>
+
+                <label for="student-numeroInscripcion">Número de Inscripción:</label>
+                <input type="text" id="student-numeroInscripcion" name="numeroInscripcion" required>
+
+                <label for="student-estado">Estado:</label>
+                <select id="student-estado" name="estado" required>
+                    <option value="">Seleccione...</option>
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="INACTIVO">INACTIVO</option>
+                    <option value="GRADUADO">GRADUADO</option>
+                    <option value="RETIRADO">RETIRADO</option>
+                </select>
+
+                <label for="student-fecha-nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="student-fecha-nacimiento" name="fechaNacimiento">
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="save-btn-text">Guardar</span>
+                        <span id="save-loading" class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/docente_dashboard.js"></script>
+</body>
+</html>

@@ -5,7 +5,8 @@ body {
     justify-content: flex-end; /* Alinea el contenido a la derecha */
     align-items: center;
     min-height: 100vh;
-    background-image: url('../img/docenteLogin.png'); /* Cuidado con la ruta. Ajústala si es necesario. */
+    /* Asegúrate de que la ruta de la imagen sea correcta para tu proyecto */
+    background-image: url('../img/docenteLogin.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -38,6 +39,7 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
+    z-index: 10; /* Asegura que esté por encima de otros elementos */
 }
 
 .back-to-home .arrow {
@@ -53,6 +55,7 @@ body {
     width: 450px; /* Ancho fijo para la tarjeta de login */
     text-align: left; /* Alinea el texto dentro de la tarjeta a la izquierda */
     color: #fff; /* Texto dentro de la tarjeta blanco */
+    position: relative; /* Permite posicionar la alerta de forma relativa a la tarjeta */
 }
 
 .welcome-message {
@@ -69,7 +72,7 @@ body {
     font-size: 1.1em;
 }
 
-.login-form input[type="email"],
+.login-form input[type="text"], /* Asegúrate de que este selector incluya tu input de username */
 .login-form input[type="password"] {
     width: 100%;
     padding: 15px;
@@ -93,6 +96,9 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex; /* Para centrar el texto y el spinner */
+    justify-content: center;
+    align-items: center;
 }
 
 .login-button:hover {
@@ -100,7 +106,70 @@ body {
     color: #1e90ff; /* Mantiene el color del texto */
 }
 
-/* Media Queries para ajustar en pantallas más pequeñas */
+/* ------------------------------------------------ */
+/* --- ESTILOS PARA LAS NOTIFICACIONES DE ALERTA --- */
+/* ------------------------------------------------ */
+.alert-container {
+    /* IMPORTANTE: Esto asegura que el contenedor tenga un alto y esté centrado */
+    margin-bottom: 15px;
+    min-height: 40px; /* Asegura un alto mínimo para que sea visible */
+    display: flex; /* Permite centrar el contenido */
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    width: 100%; /* Ocupa el ancho completo de su padre */
+    box-sizing: border-box; /* Incluye padding y border en el ancho/alto */
+    position: relative; 
+    /* color: #333; */ /* Puedes ajustar el color del texto si prefieres que no sea blanco */
+}
+
+.alert {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    width: fit-content; /* Se ajusta al contenido */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para que destaque */
+    color: #fff; /* Texto blanco para las alertas para que contraste con el fondo azul de la tarjeta */
+    font-weight: bold;
+}
+
+.alert-success {
+    background-color: #28a745; /* Un verde más oscuro y visible */
+    border: 1px solid #28a745;
+}
+
+.alert-error {
+    background-color: #dc3545; /* Un rojo más oscuro y visible */
+    border: 1px solid #dc3545;
+}
+
+/* Estilos para el spinner de carga */
+.spinner {
+    border: 3px solid rgba(0, 0, 0, 0.3); /* Cambiado a negro semi-transparente para contraste con fondo blanco del botón */
+    border-top: 3px solid #1e90ff; /* Color del spinner (azul del botón) */
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle; /* Para que esté alineado con el texto */
+    margin-left: 5px;
+}
+
+/* Animación para el spinner */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Clase para ocultar elementos (usada por el JS) */
+.hidden {
+    display: none !important;
+}
+
+/* ------------------------------------------------ */
+/* --- Media Queries para ajustar en pantallas más pequeñas --- */
+/* ------------------------------------------------ */
 @media (max-width: 1024px) {
     .login-card {
         width: 80%; /* Hace la tarjeta más ancha en pantallas medianas */

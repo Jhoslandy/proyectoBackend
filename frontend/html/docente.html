@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Docente - Sistema de Gestión Académica</title>
-    <link rel="stylesheet" href="../estilos/docente.css">
-</head>
+    <title>Login Docente</title>
+    <link rel="stylesheet" href="../estilos/docente.css"> 
+    </head>
 <body>
-    <div class="background-container">
-        </div>
-
     <div class="login-page-container">
-        <a href="index.html" class="back-to-home">Volver al inicio <span class="arrow">›</span></a>
+        <a href="index.html" class="back-to-home">
+            <span class="arrow">&lt;</span> Volver al Inicio
+        </a>
 
         <div class="login-card">
-            <p class="welcome-message">
-                ES UN PRIVILEGIO CONTAR CON TU EXPERIENCIA Y DEDICACIÓN EN NUESTRA INSTITUCIÓN.
-            </p>
+            <h2 class="welcome-message">                ES UN PRIVILEGIO CONTAR CON TU EXPERIENCIA Y DEDICACIÓN EN NUESTRA INSTITUCIÓN.
+</h2>
+            
+            <div id="login-alert" class="alert-container"></div> 
+            
             <form id="docenteLoginForm" class="login-form">
-                <label for="correo">Correo:</label>
-                <input type="email" id="correo" name="correo" required>
+                <label for="username">Nombre de Usuario:</label> <input type="text" id="username" name="username" required autocomplete="username"> <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" required autocomplete="current-password">
 
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required>
-
-                <button type="submit" class="login-button">LOGIN</button>
+                <button type="submit" class="login-button">
+                    <span id="login-btn-text">LOGIN</span>
+                    <span id="login-loading" class="spinner hidden"></span>
+                </button>
             </form>
         </div>
     </div>
-    <script src="../js/conexion.js"></script>
+
+    <script src="../js/docente.js"></script>
 </body>
 </html>

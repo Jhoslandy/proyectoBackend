@@ -1,6 +1,6 @@
 
         // API Configuration
-        const API_BASE_URL = 'http://localhost:8080/api'; // Ajusta seg�n tu configuraci�n
+        const API_BASE_URL = 'http://localhost:8081/api'; // Ajusta seg�n tu configuraci�n
         let authToken = null;
         let currentMode = 'create'; // 'create' or 'edit'
 

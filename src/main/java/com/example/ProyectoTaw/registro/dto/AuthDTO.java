@@ -1,21 +1,14 @@
 package com.example.ProyectoTaw.registro.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 import jakarta.validation.constraints.*;
-import java.util.Set;
+import java.util.Set; // Importar Set
 
-
-public class AuthDTO { // DTO para autenticación y autorización de usuarios
+public class AuthDTO {
     
-    /**
-     * Clase que representa la solicitud de inicio de sesión.
-     */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -23,14 +16,10 @@ public class AuthDTO { // DTO para autenticación y autorización de usuarios
         @NotBlank
         private String username;
 
-
         @NotBlank
         private String password;
     }
 
-    /**
-     * Clase que representa la solicitud de registro de un nuevo usuario.
-     */ 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -39,28 +28,20 @@ public class AuthDTO { // DTO para autenticación y autorización de usuarios
         @Size(min = 3, max = 20)
         private String username;
 
-
         @NotBlank
         @Size(max = 50)
         @Email
         private String email;
 
-
         @NotBlank
         @Size(min = 6, max = 40)
         private String password;
 
-
         private String nombre;
-        
         private String apellido;
-        
-        private Set<String> roles;
+        private Set<String> roles; // Para el registro, opcionalmente se pueden especificar roles
     }
 
-    /**
-     * Clase que representa la respuesta de un token JWT.
-     */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -70,9 +51,8 @@ public class AuthDTO { // DTO para autenticación y autorización de usuarios
         private Long id;
         private String username;
         private String email;
-        private Set<String> roles;
+        private Set<String> roles; // <-- Este es el campo crucial para el frontend
 
-        // Constructor para inicializar todos los campos
         public JwtResponse(String token, Long id, String username, String email, Set<String> roles) {
             this.token = token;
             this.id = id;
@@ -82,9 +62,6 @@ public class AuthDTO { // DTO para autenticación y autorización de usuarios
         }
     }
 
-    /**
-     * Clase que representa la respuesta de un mensaje.
-     */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

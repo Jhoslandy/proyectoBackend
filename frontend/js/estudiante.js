@@ -1,74 +1,200 @@
-const API_BASE_URL = 'http://localhost:8081/api'; // Ajusta según tu configuración
-let authToken = null; // Token JWT para la autenticación
-let currentMode = 'create'; // 'create' or 'edit' - Esta variable puede no ser necesaria en un login simple.
+// estudiante.js
 
-// Initialize application
+const API_BASE_URL = 'http://localhost:8081/api'; // Asegúrate que esta URL sea correcta
+let authToken = null;
+let userUsername = null; 
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Similar al docente.js, esta parte es más para un dashboard después del login.
-    // const token = sessionStorage.getItem('authToken');
-    // if (token) {
-    //     authToken = token;
-    //     // Si hay un token, podrías redirigir al dashboard de estudiantes
-    //     // window.location.href = 'estudiante_dashboard.html';
-    // }
+    const token = sessionStorage.getItem('authToken');
+    const storedUsername = sessionStorage.getItem('userUsername');
+    if (token && storedUsername) {
+        authToken = token;
+        userUsername = storedUsername;
+        showDashboard();
+    } else {
+        showLoginSection();
+    }
 
-    // Setup form handlers
-    document.getElementById('estudianteLoginForm').addEventListener('submit', handleEstudianteLogin); // <-- Usa el ID de tu formulario de estudiante
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
 });
 
-// Authentication Function for Estudiantes
-async function handleEstudianteLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
 
-    const correo = document.getElementById('correo').value; // <-- Asegúrate que tu HTML tiene un input con ID 'correo'
-    const contrasena = document.getElementById('contrasena').value; // <-- Asegúrate que tu HTML tiene un input con ID 'contrasena'
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
 
-    // Puedes agregar una función para mostrar/ocultar un spinner o mensaje de carga
-    // setLoginLoading(true);
-    // clearAlert('login-alert');
+    if (!usernameInput || !passwordInput) {
+        showAlert('login-alert', 'Error: No se encontraron los campos de usuario o contraseña.', 'error');
+        return;
+    }
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    setLoginLoading(true);
+    clearAlert('login-alert');
 
     try {
-        // Adaptar la URL al endpoint de login de estudiantes
-        const response = await fetch(`${API_BASE_URL}/auth/login/estudiante`, { // <-- CAMBIO CLAVE: Endpoint específico para estudiantes
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            // El body debe coincidir con lo que tu backend espera para el login de estudiantes
-            body: JSON.stringify({ correo: correo, contrasena: contrasena })
+            body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
-        console.log('Estudiante Login response:', data); // Debug
 
         if (response.ok) {
-            authToken = data.token || data.accessToken || data.jwt || null;
-            console.log('Estudiante Token JWT recibido y guardado:', authToken); // Debug
-            if (!authToken) {
-                alert('No se recibió token JWT del backend. Por favor, intente de nuevo.');
+            authToken = data.token;
+            userUsername = data.username;
+            sessionStorage.setItem('authToken', authToken);
+            sessionStorage.setItem('userUsername', userUsername);
+
+            const userRoles = new Set(data.roles);
+            console.log("Roles del usuario recibidos:", userRoles); // DEPURACIÓN: Ver roles
+
+            if (!userRoles.has("ROLE_ESTUDIANTE")) {
+                showAlert('login-alert', "Acceso denegado: Este login es solo para ESTUDIANTES.", 'error');
+                sessionStorage.clear();
+                authToken = null;
+                userUsername = null;
+                setLoginLoading(false);
                 return;
             }
-            sessionStorage.setItem('authToken', authToken);
-            sessionStorage.setItem('userEmail', correo); // O sessionStorage.setItem('username', correo);
-            sessionStorage.setItem('userRole', 'estudiante'); // <-- Guarda el rol del usuario
 
-            alert('Estudiante Login exitoso!');
+            showAlert('login-alert', 'Inicio de sesión exitoso. Redirigiendo...', 'success');
             setTimeout(() => {
-                // Redirigir al dashboard de estudiantes después de un login exitoso
-                window.location.href = 'estudiante_dashboard.html'; // <-- Crea esta página para el dashboard
+                showDashboard();
+                // Aquí podrías cargar datos específicos para el estudiante (ej. loadEstudianteData(userUsername);)
             }, 1000);
         } else {
-            alert(data.message || 'Error en el login de estudiante. Credenciales inválidas.');
+            let errorMessage = 'Ocurrió un error inesperado al iniciar sesión.';
+            if (data && data.message) {
+                errorMessage = data.message;
+            } else if (response.status === 401) {
+                errorMessage = 'Credenciales incorrectas. Verifica tu usuario y contraseña.';
+            } else if (response.status === 403) {
+                errorMessage = 'Acceso denegado. No tienes permiso para acceder.';
+            }
+            showAlert('login-alert', errorMessage, 'error');
         }
     } catch (error) {
-        console.error('Estudiante Login error:', error);
-        alert('Error de conexión con el servidor. Por favor, intente de nuevo.');
+        console.error('Error de conexión:', error);
+        showAlert('login-alert', 'Error de conexión con el servidor. Intenta de nuevo más tarde.', 'error');
     } finally {
-        // setLoginLoading(false);
+        setLoginLoading(false);
     }
 }
 
-// Las funciones `logout`, `showAlert`, `clearAlert`, `setLoginLoading`, `showDashboard`, `loadStudents`
-// no son directamente relevantes para la página de login en sí, sino para un dashboard posterior.
-// Si las vas a usar, deberías implementarlas en el script del dashboard.
-// Para el login, solo necesitamos `handleEstudianteLogin`.
+function handleLogout() {
+    sessionStorage.clear();
+    authToken = null;
+    userUsername = null;
+    showAlert('login-alert', 'Sesión cerrada exitosamente.', 'info');
+    showLoginSection();
+    clearDashboard();
+}
+
+function showLoginSection() {
+    document.getElementById('login-section').classList.remove('hidden');
+    document.getElementById('student-dashboard').classList.add('hidden');
+    const docenteDashboard = document.getElementById('docente-dashboard');
+    if (docenteDashboard) docenteDashboard.classList.add('hidden');
+}
+
+function showDashboard() {
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('student-dashboard').classList.remove('hidden');
+    const docenteDashboard = document.getElementById('docente-dashboard');
+    if (docenteDashboard) docenteDashboard.classList.add('hidden');
+
+    const welcomeMessage = document.getElementById('student-welcome-message');
+    if (welcomeMessage && userUsername) {
+        welcomeMessage.textContent = `Bienvenido, ${userUsername} (Estudiante)`;
+    }
+}
+
+function clearDashboard() {
+    const welcomeMessage = document.getElementById('student-welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = '';
+    }
+    clearAlert('student-alert');
+}
+
+function showAlert(elementId, message, type) {
+    const alertElement = document.getElementById(elementId);
+    if (alertElement) {
+        alertElement.textContent = message;
+        alertElement.className = `alert alert-${type}`;
+        alertElement.classList.remove('hidden');
+    }
+}
+
+function clearAlert(elementId) {
+    const alertElement = document.getElementById(elementId);
+    if (alertElement) {
+        alertElement.textContent = '';
+        alertElement.className = '';
+        alertElement.classList.add('hidden');
+    }
+}
+
+function setLoginLoading(loading) {
+    const btnText = document.getElementById('login-btn-text');
+    const loadingSpinner = document.getElementById('login-loading');
+    const btn = document.querySelector('#login-form .btn');
+
+    if (btnText && loadingSpinner && btn) {
+        if (loading) {
+            btnText.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            btn.disabled = true;
+        } else {
+            btnText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
+            btn.disabled = false;
+        }
+    }
+}
+
+// Ejemplo de carga de datos para estudiante (DESCOMENTAR SI TIENES UN ENDPOINT ASOCIADO)
+/*
+async function loadEstudianteData(username) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/estudiantes/${username}/perfil`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`, // ¡CRÍTICO para peticiones protegidas!
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Datos del estudiante cargados:', data);
+            // Actualiza tu HTML con los datos
+        } else if (response.status === 401) {
+            showAlert('student-alert', 'Sesión expirada o no autorizada. Por favor, inicia sesión de nuevo.', 'error');
+            handleLogout();
+        } else if (response.status === 403) {
+            showAlert('student-alert', 'No tienes permiso para ver esta información.', 'error');
+        } else {
+            showAlert('student-alert', 'No se pudieron cargar los datos del estudiante.', 'error');
+            console.error('Error al cargar datos del estudiante:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error de conexión al cargar datos del estudiante:', error);
+        showAlert('student-alert', 'Error de conexión al cargar datos del estudiante.', 'error');
+    }
+}
+*/

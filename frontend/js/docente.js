@@ -1,73 +1,200 @@
-const API_BASE_URL = 'http://localhost:8081/api'; // Ajusta según tu configuración
+// docente.js
+
+const API_BASE_URL = 'http://localhost:8081/api'; // Asegúrate que esta URL sea correcta
 let authToken = null;
-let currentMode = 'create';
+let userUsername = null; 
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('docenteLoginForm').addEventListener('submit', handleDocenteLogin);
+    const token = sessionStorage.getItem('authToken');
+    const storedUsername = sessionStorage.getItem('userUsername');
+    if (token && storedUsername) {
+        authToken = token;
+        userUsername = storedUsername;
+        showDashboard();
+    } else {
+        showLoginSection();
+    }
+
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
 });
 
-async function handleDocenteLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
 
-    const correo = document.getElementById('correo').value;
-    const contrasena = document.getElementById('contrasena').value;
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
 
-    // Puedes agregar una función para mostrar/ocultar un spinner o mensaje de carga
-    // setLoginLoading(true);
-    // clearAlert('login-alert');
+    if (!usernameInput || !passwordInput) {
+        showAlert('login-alert', 'Error: No se encontraron los campos de usuario o contraseña.', 'error');
+        return;
+    }
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    setLoginLoading(true);
+    clearAlert('login-alert');
 
     try {
-        // CAMBIO CLAVE: El endpoint es /auth/login para ambos roles
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            // CAMBIO CLAVE: El backend espera 'username' y 'password'
-            body: JSON.stringify({ username: correo, password: contrasena })
+            body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
-        console.log('Docente Login response:', data); // Debug
 
         if (response.ok) {
-            authToken = data.token || data.accessToken || data.jwt || null;
-            console.log('Docente Token JWT recibido y guardado:', authToken); // Debug
-
-            if (!authToken) {
-                alert('No se recibió token JWT del backend. Por favor, intente de nuevo.');
-                return;
-            }
-
-            // Validar que el usuario logueado tenga el rol de docente
-            // Asumiendo que `data.roles` es una lista de strings como ["ROLE_DOCENTE"]
-            const userRoles = new Set(data.roles); // Convertir a Set para búsqueda eficiente
-            if (!userRoles.has("ROLE_DOCENTE") && !userRoles.has("docente")) { // Ajusta el nombre del rol si es diferente (ej. "DOCENTE")
-                alert("Acceso denegado: Este login es solo para DOCENTES.");
-                // Opcional: Limpiar el token si se guardó por error o redirigir al login principal
-                sessionStorage.removeItem('authToken');
-                sessionStorage.removeItem('userEmail');
-                sessionStorage.removeItem('userRole');
-                return;
-            }
-
-
+            authToken = data.token;
+            userUsername = data.username;
             sessionStorage.setItem('authToken', authToken);
-            sessionStorage.setItem('userEmail', correo);
-            sessionStorage.setItem('userRole', 'docente'); // Guardamos el rol para futuras verificaciones
+            sessionStorage.setItem('userUsername', userUsername);
 
-            alert('Docente Login exitoso!');
+            const userRoles = new Set(data.roles);
+            console.log("Roles del usuario recibidos:", userRoles); // DEPURACIÓN: Ver roles
+
+            if (!userRoles.has("ROLE_DOCENTE")) { // Verificar que el rol sea "ROLE_DOCENTE"
+                showAlert('login-alert', "Acceso denegado: Este login es solo para DOCENTES.", 'error');
+                sessionStorage.clear();
+                authToken = null;
+                userUsername = null;
+                setLoginLoading(false);
+                return;
+            }
+
+            showAlert('login-alert', 'Inicio de sesión exitoso. Redirigiendo...', 'success');
             setTimeout(() => {
-                window.location.href = 'docente_dashboard.html';
+                showDashboard();
+                // Aquí podrías cargar datos específicos para el docente (ej. loadDocenteData(userUsername);)
             }, 1000);
-
         } else {
-            alert(data.message || 'Error en el login. Credenciales inválidas o no autorizado.');
+            let errorMessage = 'Ocurrió un error inesperado al iniciar sesión.';
+            if (data && data.message) {
+                errorMessage = data.message;
+            } else if (response.status === 401) {
+                errorMessage = 'Credenciales incorrectas. Verifica tu usuario y contraseña.';
+            } else if (response.status === 403) {
+                errorMessage = 'Acceso denegado. No tienes permiso para acceder.';
+            }
+            showAlert('login-alert', errorMessage, 'error');
         }
     } catch (error) {
-        console.error('Docente Login error:', error);
-        alert('Error de conexión con el servidor. Por favor, intente de nuevo.');
+        console.error('Error de conexión:', error);
+        showAlert('login-alert', 'Error de conexión con el servidor. Intenta de nuevo más tarde.', 'error');
     } finally {
-        // setLoginLoading(false); // Descomentar si implementas estas funciones
+        setLoginLoading(false);
     }
 }
+
+function handleLogout() {
+    sessionStorage.clear();
+    authToken = null;
+    userUsername = null;
+    showAlert('login-alert', 'Sesión cerrada exitosamente.', 'info');
+    showLoginSection();
+    clearDashboard();
+}
+
+function showLoginSection() {
+    document.getElementById('login-section').classList.remove('hidden');
+    document.getElementById('docente-dashboard').classList.add('hidden');
+    const studentDashboard = document.getElementById('student-dashboard');
+    if (studentDashboard) studentDashboard.classList.add('hidden');
+}
+
+function showDashboard() {
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('docente-dashboard').classList.remove('hidden');
+    const studentDashboard = document.getElementById('student-dashboard');
+    if (studentDashboard) studentDashboard.classList.add('hidden');
+
+    const welcomeMessage = document.getElementById('docente-welcome-message');
+    if (welcomeMessage && userUsername) {
+        welcomeMessage.textContent = `Bienvenido, ${userUsername} (Docente)`;
+    }
+}
+
+function clearDashboard() {
+    const welcomeMessage = document.getElementById('docente-welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = '';
+    }
+    clearAlert('docente-alert');
+}
+
+function showAlert(elementId, message, type) {
+    const alertElement = document.getElementById(elementId);
+    if (alertElement) {
+        alertElement.textContent = message;
+        alertElement.className = `alert alert-${type}`;
+        alertElement.classList.remove('hidden');
+    }
+}
+
+function clearAlert(elementId) {
+    const alertElement = document.getElementById(elementId);
+    if (alertElement) {
+        alertElement.textContent = '';
+        alertElement.className = '';
+        alertElement.classList.add('hidden');
+    }
+}
+
+function setLoginLoading(loading) {
+    const btnText = document.getElementById('login-btn-text');
+    const loadingSpinner = document.getElementById('login-loading');
+    const btn = document.querySelector('#login-form .btn');
+
+    if (btnText && loadingSpinner && btn) {
+        if (loading) {
+            btnText.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            btn.disabled = true;
+        } else {
+            btnText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
+            btn.disabled = false;
+        }
+    }
+}
+
+// Ejemplo de carga de datos para docente (DESCOMENTAR SI TIENES UN ENDPOINT ASOCIADO)
+/*
+async function loadDocenteData(username) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/docentes/${username}/perfil`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`, // ¡CRÍTICO para peticiones protegidas!
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Datos del docente cargados:', data);
+            // Actualiza tu HTML con los datos
+        } else if (response.status === 401) {
+            showAlert('docente-alert', 'Sesión expirada o no autorizada. Por favor, inicia sesión de nuevo.', 'error');
+            handleLogout();
+        } else if (response.status === 403) {
+            showAlert('docente-alert', 'No tienes permiso para ver esta información.', 'error');
+        } else {
+            showAlert('docente-alert', 'No se pudieron cargar los datos del docente.', 'error');
+            console.error('Error al cargar datos del docente:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error de conexión al cargar datos del docente:', error);
+        showAlert('docente-alert', 'Error de conexión al cargar datos del docente.', 'error');
+    }
+}
+*/
