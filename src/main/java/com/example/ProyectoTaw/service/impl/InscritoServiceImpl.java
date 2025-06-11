@@ -204,6 +204,7 @@ public class InscritoServiceImpl implements IInscritoService {
                 .fechaInscripcion(inscrito.getFechaInscripcion())
                 .build();
     }
+    
 
     private Inscrito convertToEntity(InscritoDTO inscritoDTO, Estudiante estudiante, Materia materia) {
         if (inscritoDTO == null) {

@@ -113,3 +113,41 @@ body {
     }
 }
 
+/* Add this to your existing styles.css */
+
+.roles {
+    /* Assuming you already have display properties here, e.g.: */
+    display: flex; /* or grid */
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+    justify-content: center; /* Centers the buttons */
+    align-items: center;
+    gap: 20px; /* Adjust as needed for spacing between buttons */
+}
+
+.role-button {
+    /* Your existing button styles */
+    /* Example: */
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: #4CAF50; /* Example color */
+    color: white;
+    transition: background-color 0.3s ease;
+    min-width: 200px; /* Ensure buttons have a minimum width */
+    text-align: center;
+}
+
+.role-button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+
+/* If you need specific styling for the admin button */
+#admin-button {
+    background-color: #007bff; /* A different color for the admin button */
+}
+
+#admin-button:hover {
+    background-color: #0056b3;
+}

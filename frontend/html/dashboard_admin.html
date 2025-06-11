@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Administración</title>
+    <link rel="stylesheet" href="../estilos/dashboard_admin.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Bienvenido al Dashboard de Administración</h1>
+            <p id="admin-email-display">Cargando email...</p>
+            <button id="logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+        </header>
+
+        <nav class="dashboard-nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="materias" data-load-function="loadMaterias">Gestión de Materias</a></li>
+                <li><a href="#" class="nav-link" data-section="estudiantes" data-load-function="loadEstudiantes">Gestión de Estudiantes</a></li>
+                <li><a href="#" class="nav-link" data-section="docentes" data-load-function="loadDocentes">Gestión de Docentes</a></li>
+                <li><a href="#" class="nav-link" data-section="inscripciones" data-load-function="loadInscripciones">Gestión de Inscripciones</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-main">
+            <div id="dashboard-alert" class="alert-container"></div>
+
+            <section id="materias-section" class="dashboard-section">
+                <h2>Gestión de Materias</h2>
+                <button class="btn btn-primary" onclick="openMateriaModal(false)">Agregar Nueva Materia</button>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código Único</th>
+                                <th>Nombre de Materia</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materias-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="estudiantes-section" class="dashboard-section">
+                <h2>Gestión de Estudiantes</h2>
+                <button class="btn btn-primary" onclick="openEstudianteModal(false)">Agregar Nuevo Estudiante</button>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>CI</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Email</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="estudiantes-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="docentes-section" class="dashboard-section">
+                <h2>Gestión de Docentes</h2>
+                <button class="btn btn-primary" onclick="openDocenteModal(false)">Agregar Nuevo Docente</button>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>CI</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Email</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Departamento</th>
+                                <th>No. Empleado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="docentes-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="inscripciones-section" class="dashboard-section">
+                <h2>Gestión de Inscripciones</h2>
+                <button class="btn btn-primary" onclick="openInscripcionModal(false)">Registrar Nueva Inscripción</button>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID Inscripción</th>
+                                <th>CI Estudiante</th>
+                                <th>Código Materia</th>
+                                <th>Fecha Inscripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inscripciones-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="materia-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeMateriaModal()">&times;</span>
+            <h2 id="materia-modal-title"></h2>
+            <div id="materia-modal-alert" class="alert-container"></div>
+            <form id="materia-form">
+                <div class="form-group">
+                    <label for="materia-nombre">Nombre de Materia:</label>
+                    <input type="text" id="materia-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="materia-codigo-unico">Código Único:</label>
+                    <input type="text" id="materia-codigo-unico" required>
+                </div>
+                <div class="form-group">
+                    <label for="materia-descripcion">Descripción:</label>
+                    <textarea id="materia-descripcion"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="materia-save-btn-text"></span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeMateriaModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="estudiante-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEstudianteModal()">&times;</span>
+            <h2 id="estudiante-modal-title"></h2>
+            <div id="estudiante-modal-alert" class="alert-container"></div>
+            <form id="estudiante-form">
+                <div class="form-group">
+                    <label for="estudiante-ci">C.I.:</label>
+                    <input type="text" id="estudiante-ci" required>
+                </div>
+                <div class="form-group">
+                    <label for="estudiante-nombre">Nombre:</label>
+                    <input type="text" id="estudiante-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="estudiante-apellido">Apellido:</label>
+                    <input type="text" id="estudiante-apellido" required>
+                </div>
+                <div class="form-group">
+                    <label for="estudiante-email">Email:</label>
+                    <input type="email" id="estudiante-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="estudiante-fechaNac">Fecha de Nacimiento:</label>
+                    <input type="date" id="estudiante-fechaNac" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="estudiante-save-btn-text"></span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEstudianteModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="docente-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeDocenteModal()">&times;</span>
+            <h2 id="docente-modal-title"></h2>
+            <div id="docente-modal-alert" class="alert-container"></div>
+            <form id="docente-form">
+                <div class="form-group">
+                    <label for="docente-ci">C.I.:</label>
+                    <input type="text" id="docente-ci" required>
+                </div>
+                <div class="form-group">
+                    <label for="docente-nombre">Nombre:</label>
+                    <input type="text" id="docente-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="docente-apellido">Apellido:</label>
+                    <input type="text" id="docente-apellido" required>
+                </div>
+                <div class="form-group">
+                    <label for="docente-email">Email:</label>
+                    <input type="email" id="docente-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="docente-fechaNac">Fecha de Nacimiento:</label>
+                    <input type="date" id="docente-fechaNac" required>
+                </div>
+                <div class="form-group">
+                    <label for="docente-departamento">Departamento:</label>
+                    <input type="text" id="docente-departamento">
+                </div>
+                <div class="form-group">
+                    <label for="docente-noEmpleado">No. Empleado:</label>
+                    <input type="text" id="docente-noEmpleado">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="docente-save-btn-text"></span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDocenteModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="enrollment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeInscripcionModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="enrollment-modal-alert" class="alert-container"></div>
+            <form id="enrollment-form">
+                <input type="hidden" id="enrollment-id" name="enrollmentId">
+
+                <div class="form-group">
+                    <label for="enrollment-estudiante-ci">CI del Estudiante:</label>
+                    <input type="text" id="enrollment-estudiante-ci" required>
+                </div>
+                <div class="form-group">
+                    <label for="enrollment-materia-codigo">Código Único de Materia:</label>
+                    <input type="text" id="enrollment-materia-codigo" required>
+                </div>
+                <div class="form-group">
+                    <label for="enrollment-fecha-inscripcion">Fecha de Inscripción:</label>
+                    <input type="date" id="enrollment-fecha-inscripcion" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="save-btn-text"></span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeInscripcionModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/dashboard_admin.js"></script>
+</body>
+</html>
