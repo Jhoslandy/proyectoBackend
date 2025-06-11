@@ -18,7 +18,7 @@ public class MateriaValidator {
     }
 
     public void validarNombreUnico(String nombre, Long idActual) {
-        Optional<Materia> existente = materiaRepository.findByNombre(nombre);
+        Optional<Materia> existente = materiaRepository.findByCodigoUnico(nombre);
         if (existente.isPresent() && (idActual == null || !existente.get().getId().equals(idActual))) {
             throw new BusinessException("Ya existe una materia con el nombre: " + nombre);
         }
