@@ -309,5 +309,20 @@ Se implementa un `GlobalExceptionHandler` (Clase con `@ControllerAdvice` y `@Exc
 3.  Realiza tus cambios y haz "commit" (`git commit -m 'feat: Añadir nueva funcionalidad'`).
 4.  Haz "push" a la rama (`git push origin feature/nueva-funcionalidad`).
 5.  Abre un "pull request" explicando tus cambios.
+6.  
+
+
+## 8. Manejo y ejecucion del sistema (Manual de Usuario)
+Para empezar, se tiene una pantalla para loguearse con distintos roles.
+
+![Captura de pantalla de la página de inicio de sesión](img/principal.png "Página de inicio")
+
+
+A contimuacion se muestra cada login de cada rol por separado:
+
+![Captura de pantalla del panel de control con estadísticas](img/loginDocente "Vista Docente")
+
+---
+
 
 
