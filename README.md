@@ -1,7 +1,14 @@
 
-# Proyecto de API REST Educativa
+# Proyecto: Sistema de Gestion Academica Integral
 
 Este proyecto es una API RESTful desarrollada con Spring Boot, diseñada para gestionar aspectos clave de un sistema educativo. Permite la administración de estudiantes, docentes, materias, cursos, asistencias, inscripciones, notas y relaciones entre entidades académicas.
+* **GRUPO**: Grupo 14 
+* **INTEGRANTES**: 
+	* Aruquipa Coca José Andres
+	* Callisaya Ramos Herlan Gabriel
+	* Marca Churqui Edith Jhomara
+	* Tinta Chura Luz Gabriela
+	* Zeballos Romero Daniel Alfredo
 
 ## 1. Tecnologías Utilizadas
 
@@ -303,17 +310,4 @@ Se implementa un `GlobalExceptionHandler` (Clase con `@ControllerAdvice` y `@Exc
 4.  Haz "push" a la rama (`git push origin feature/nueva-funcionalidad`).
 5.  Abre un "pull request" explicando tus cambios.
 
-## 8. Licencia
 
-Este proyecto está bajo la licencia [Indica tu licencia aquí, ej. MIT o Apache 2.0].
-
-## 9. Contacto
-
-* **GRUPO**: Grupo 14 - Sistema de Gestión Académica Integral
-* **INTEGRANTES**: 
-	* Aruquipa Coca José Andres
-	* Calderon Conde Miguel Angel
-	* Callisaya Ramos Herlan Gabriel
-	* Marca Churqui Edith Jhomara
-	* Tinta Chura Luz Gabriela
-	* Zeballos Romero Daniel Alfredo
