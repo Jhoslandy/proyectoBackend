@@ -320,7 +320,11 @@ Para empezar, se tiene una pantalla para loguearse con distintos roles.
 
 A contimuacion se muestra cada login de cada rol por separado:
 
-![Captura de pantalla del panel de control con estadísticas](img/loginDocente "Vista Docente")
+![Captura de pantalla del panel de control con estadísticas](img/loginAdmin.png "Vista Docente")
+
+![Captura de pantalla del panel de control con estadísticas](img/loginDocente.png "Vista Docente")
+
+![Captura de pantalla del panel de control con estadísticas](img/loginEst.png "Vista Docente")
 
 ---
 
