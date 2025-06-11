@@ -1,5 +1,5 @@
 
-# Proyecto de API REST Educativa
+# Proyecto: Sistema de Gestion Academica Integral
 
 Este proyecto es una API RESTful desarrollada con Spring Boot, diseñada para gestionar aspectos clave de un sistema educativo. Permite la administración de estudiantes, docentes, materias, cursos, asistencias, inscripciones, notas y relaciones entre entidades académicas.
 
