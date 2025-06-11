@@ -326,6 +326,26 @@ A contimuacion se muestra cada login de cada rol por separado:
 
 ![Captura de pantalla del panel de control con estadísticas](img/loginEst.png "Vista Docente")
 
+### 2.1 Login Admin
+
+Una vez logueado como adminnstrador se versa la siguiente pantalla con las siguiente acciones:
+
+![Captura de pantalla del panel de control con estadísticas](img/panelAdmin.png "Vista Docente")
+
+### 2.1 Login Docente
+
+Una vez logueado como docente se versa la siguiente pantalla con las siguiente acciones:
+
+
+
+### 2.1 Login Estudiante
+
+Una vez logueado como docente se versa la siguiente pantalla con las siguiente acciones:
+
+
+
+
+
 ---
 
 
