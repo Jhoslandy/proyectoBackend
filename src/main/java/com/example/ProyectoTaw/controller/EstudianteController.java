@@ -113,4 +113,16 @@ public class EstudianteController {
         Estudiante estudiante = estudianteService.obtenerEstudianteConBloqueo(ci);
         return new ResponseEntity<>(estudiante, HttpStatus.OK);
     }
+    // Inside EstudianteController class
+    /**
+     * Endpoint para obtener un estudiante por su email.
+     * GET /api/estudiantes/by-email/{email}
+     * @param email El email del estudiante.
+     * @return ResponseEntity con el EstudianteDTO y estado HTTP 200 (OK), o 404 (NOT_FOUND) si no existe.
+     */
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<EstudianteDTO> getEstudianteByEmail(@PathVariable String email) {
+        EstudianteDTO estudiante = estudianteService.obtenerEstudiantePorEmail(email);
+        return new ResponseEntity<>(estudiante, HttpStatus.OK);
+    }
 }

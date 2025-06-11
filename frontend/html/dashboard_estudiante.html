@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard del Estudiante</title>
+    <link rel="stylesheet" href="../estilos/dashboard_estudiante.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Bienvenido a tu Dashboard, Estudiante</h1>
+            <p id="student-email-display">Cargando email...</p>
+            <button id="logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+        </header>
+
+        <nav class="dashboard-nav">
+            <ul>
+                <li><a href="#available-subjects-section">Materias Disponibles</a></li>
+                <li><a href="#my-enrollments-section">Mis Inscripciones</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-main">
+            <div id="dashboard-alert" class="alert-container"></div>
+
+            <section id="available-subjects-section" class="dashboard-section">
+                <h2>Materias Disponibles</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código Único</th>
+                                <th>Nombre de Materia</th>
+                                <th>Descripción</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="available-subjects-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="my-enrollments-section" class="dashboard-section">
+                <h2>Mis Inscripciones</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código Único Materia</th>
+                                <th>Nombre Materia</th>
+                                <th>Fecha Inscripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="my-enrollments-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="enrollment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Inscribir Materia</h2>
+            <div id="modal-alert" class="alert-container"></div>
+            <form id="enrollment-form">
+                <input type="hidden" id="enrollment-materia-codigo" name="materiaCodigo">
+                <input type="hidden" id="enrollment-id" name="enrollmentId">
+
+                <div class="form-group">
+                    <label for="enrollment-materia-nombre">Materia:</label>
+                    <input type="text" id="enrollment-materia-nombre" disabled>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">
+                        <span id="save-btn-text">Guardar Inscripción</span>
+                        <span id="save-loading" class="spinner hidden"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/dashboard_estudiante.js"></script>
+</body>
+</html>

@@ -55,4 +55,7 @@ public interface IEstudianteService {
      * @return La entidad Estudiante con el bloqueo aplicado.
      */
     Estudiante obtenerEstudianteConBloqueo(String ci); // Tipo cambiado a String
+
+    // Inside IEstudianteService interface
+EstudianteDTO obtenerEstudiantePorEmail(String email);
 }
